@@ -9,9 +9,6 @@
 [![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white)](https://matplotlib.org)
 
-<p align="center">
-  <img src="https://img.icons8.com/color/200/blackjack.png" alt="Blackjack Icon" width="150"/>
-</p>
 
 **An advanced Blackjack simulation framework featuring multiple strategies, card counting systems, AI-powered decision making with Q-Learning, and optimal bet sizing using the Kelly Criterion.**
 
