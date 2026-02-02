@@ -70,7 +70,7 @@ Python 3.8+
 
 1️⃣ **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/blackjack.git
+git clone https://github.com/JosselinPerret/blackjack.git
 cd blackjack
 ```
 
