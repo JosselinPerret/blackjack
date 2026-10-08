@@ -1,172 +1,70 @@
-<div align="center">
+# Blackjack Strategy Simulator
 
-# 🃏 BlackJack AI & Strategy Simulator
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=flat&logo=jupyter&logoColor=white)](https://jupyter.org)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)](https://jupyter.org)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
-[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white)](https://matplotlib.org)
+A Blackjack simulator for comparing playing strategies, card counting, bet sizing and a tabular Q-Learning agent. Everything runs from a single Jupyter notebook.
 
+## Contents
 
-**An advanced Blackjack simulation framework featuring multiple strategies, card counting systems, AI-powered decision making with Q-Learning, and optimal bet sizing using the Kelly Criterion.**
+- [Overview](#overview)
+- [Installation](#installation)
+- [Simulation Rules](#simulation-rules)
+- [Strategies](#strategies)
+- [Results](#results)
+- [Code Structure](#code-structure)
+- [References](#references)
+- [Contributing](#contributing)
+- [License](#license)
 
-[🚀 Getting Started](#-getting-started) •
-[📊 Features](#-features) •
-[🎯 Strategies](#-strategies-implemented) •
-[📈 Results](#-simulation-results) •
-[🧠 Q-Learning AI](#-q-learning-ai)
+## Overview
 
-</div>
+The project simulates Blackjack hands and measures how different decision rules perform. It covers:
 
----
+| Component | Description |
+|:---|:---|
+| Playing strategies | Threshold rules, parametrized rules and a basic strategy lookup |
+| Card counting | Hi-Lo running count and true count |
+| Bet sizing | Count-based bet spread and fractional Kelly sizing |
+| Reinforcement learning | Q-Learning agent trained on 10 million hands |
+| Analysis | Win rate, bankroll trajectories, Monte Carlo runs and strategy heatmaps |
 
-## 📋 Table of Contents
+## Installation
 
-- [🎰 Overview](#-overview)
-- [🚀 Getting Started](#-getting-started)
-- [📊 Features](#-features)
-- [🎯 Strategies Implemented](#-strategies-implemented)
-  - [🔴 Never Bust Strategy](#-never-bust-strategy)
-  - [🟠 Simplified Parametrized Strategy](#-simplified-parametrized-strategy)
-  - [🟡 Hi-Lo Card Counting](#-hi-lo-card-counting)
-  - [🟢 Basic Strategy Tables](#-basic-strategy-tables)
-  - [🔵 Kelly Criterion Betting](#-kelly-criterion-betting)
-  - [🟣 Q-Learning AI](#-q-learning-ai)
-- [📈 Simulation Results](#-simulation-results)
-- [🛠️ Technical Architecture](#️-technical-architecture)
-- [📚 References](#-references)
+Requires Python 3.8 or later.
 
----
-
-## 🎰 Overview
-
-This project is a comprehensive Blackjack research platform that simulates and analyzes various playing and betting strategies. It combines classical game theory approaches with modern reinforcement learning techniques to find optimal strategies for the casino classic.
-
-<div align="center">
-
-| 🎲 Feature | 📝 Description |
-|:---:|:---|
-| **Multi-Strategy Simulation** | Compare different playing strategies head-to-head |
-| **Card Counting** | Implements Hi-Lo counting system with true count calculations |
-| **AI Decision Making** | Q-Learning agent trained on 10M+ hands |
-| **Bet Optimization** | Kelly Criterion for mathematically optimal bet sizing |
-| **Visual Analytics** | Rich visualizations with Matplotlib, Seaborn & Plotly |
-
-</div>
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-```bash
-Python 3.8+
-```
-
-### Installation
-
-1️⃣ **Clone the repository**
 ```bash
 git clone https://github.com/JosselinPerret/blackjack.git
 cd blackjack
-```
-
-2️⃣ **Install dependencies**
-```bash
 pip install numpy pandas matplotlib seaborn plotly tqdm
-```
-
-3️⃣ **Launch Jupyter Notebook**
-```bash
 jupyter notebook blackjack.ipynb
 ```
 
----
+## Simulation Rules
 
-## 📊 Features
+- 6-deck shoe, reshuffled at 75% penetration (cut card)
+- Aces count as 1 or 11
+- Dealer hits on soft 17
+- Player actions: hit, stand, double, split
 
-<table>
-<tr>
-<td width="50%">
+## Strategies
 
-### 🎴 Realistic Game Simulation
-- 6-deck shoe with 75% penetration
-- Proper shuffle and "cut card" mechanics
-- Accurate card value handling (Aces as 1 or 11)
-- Dealer hits on soft 17 rule
+### Never Bust (threshold)
 
-</td>
-<td width="50%">
+The player stands once the hand total reaches a fixed threshold. The notebook sweeps the threshold and records the win rate.
 
-### 📉 Advanced Analytics
-- Win rate calculation across strategies
-- Bankroll trajectory tracking
-- Monte Carlo simulations (100+ runs)
-- Heatmap strategy visualization
+| Threshold | Win rate |
+|:---------:|:--------:|
+| 11 | ~32% |
+| 12 | ~38% |
+| 14 | ~42% (best) |
+| 16 | ~40% |
+| 20 | ~35% |
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+### Parametrized
 
-### 🧮 Mathematical Models
-- Kelly Criterion bet optimization
-- True Count calculation from Running Count
-- Advantage estimation per True Count
-- Variance-adjusted betting
-
-</td>
-<td width="50%">
-
-### 🤖 Machine Learning
-- Q-Learning reinforcement learning
-- State-space: (hand total, dealer card, usable ace, count bucket)
-- Action space: STAND, HIT, DOUBLE
-- Epsilon-greedy exploration
-
-</td>
-</tr>
-</table>
-
----
-
-## 🎯 Strategies Implemented
-
-### 🔴 Never Bust Strategy
-
-> *"Stand on a specific threshold to never go over 21"*
-
-The simplest strategy that varies the standing threshold to find the optimal point.
-
-```
-📌 KEY INSIGHT: Stand at 14 provides optimal win rate
-```
-
-| Threshold | Win Rate | Notes |
-|:---------:|:--------:|:------|
-| 11 | ~32% | Too aggressive - frequently busts |
-| 12 | ~38% | Still too risky |
-| **14** | **~42%** | ⭐ **Optimal threshold** |
-| 16 | ~40% | Misses opportunities to improve hand |
-| 20 | ~35% | Stands too early |
-
-<details>
-<summary>📊 Click to see the optimization chart</summary>
-
-The notebook generates a plot showing win rate vs. strategy limit, with the optimal point highlighted at threshold 14.
-
-</details>
-
----
-
-### 🟠 Simplified Parametrized Strategy
-
-> *"Use two thresholds: always hit below X, always stand above Y"*
-
-A more nuanced approach that considers both player hand and dealer's up-card.
+Two thresholds define the rule. The player always hits at or below `hit_threshold` and always stands at or above `stand_threshold`. Between the two, the player hits if the dealer up card is worth 7 or more, and stands otherwise.
 
 ```python
 def strategy_parametrized(player_hand, dealer_up_card, hit_threshold, stand_threshold):
@@ -175,218 +73,138 @@ def strategy_parametrized(player_hand, dealer_up_card, hit_threshold, stand_thre
     elif player_val >= stand_threshold:
         return "STAND"
     else:
-        # In between: check dealer's card
         return "HIT" if dealer_val >= 7 else "STAND"
 ```
 
-<div align="center">
+Best parameters found: `hit_threshold = 11`, `stand_threshold = 17`, with a win rate of about 43%.
 
-| Parameter | Optimal Value |
-|:---------:|:-------------:|
-| Hit Threshold | **11** |
-| Stand Threshold | **17** |
-| **Win Rate** | **~43%** |
+### Hi-Lo Card Counting
 
-</div>
+Each card seen changes the running count:
 
----
+| Cards | Value |
+|:-----:|:-----:|
+| 2, 3, 4, 5, 6 | +1 |
+| 7, 8, 9 | 0 |
+| 10, J, Q, K, A | -1 |
 
-### 🟡 Hi-Lo Card Counting
-
-> *"Track the ratio of high to low cards remaining"*
-
-Implementation of the famous Hi-Lo card counting system used by professional players.
-
-#### Card Values
-
-| Cards | Count Value | Reasoning |
-|:-----:|:-----------:|:----------|
-| 2, 3, 4, 5, 6 | **+1** | Low cards favor dealer |
-| 7, 8, 9 | **0** | Neutral cards |
-| 10, J, Q, K, A | **-1** | High cards favor player |
-
-#### True Count Formula
+The true count normalizes the running count by the number of decks left in the shoe:
 
 $$\text{True Count} = \frac{\text{Running Count}}{\text{Decks Remaining}}$$
 
-#### Bet Spread System
+The bet is scaled from a base unit according to the true count:
 
-| True Count | Bet Multiplier | Example ($10 unit) |
-|:----------:|:--------------:|:------------------:|
-| ≤ 1 | 1x | $10 |
+| True count | Bet multiplier | Bet with a $10 unit |
+|:----------:|:--------------:|:-------------------:|
+| 1 or less | 1x | $10 |
 | 2 | 2x | $20 |
 | 3 | 4x | $40 |
-| ≥ 4 | 8x | $80 |
+| 4 or more | 8x | $80 |
 
----
+### Basic Strategy
 
-### 🟢 Basic Strategy Tables
+`BlackjackAdvisor` looks up the action from three tables: hard totals, soft totals and pairs. Examples: hard 16 against a dealer 10 is a hit, soft 18 against a dealer 9 is a hit, and a pair of 8s is always split.
 
-> *"The mathematically optimal play for every situation"*
+| Code | Action |
+|:----:|:-------|
+| H | Hit |
+| S | Stand |
+| D | Double (hit if doubling is not allowed) |
+| Ds | Double (stand if doubling is not allowed) |
+| P | Split |
 
-Complete implementation of Las Vegas basic strategy covering:
+### Kelly Criterion Bet Sizing
 
-<div align="center">
+The bet fraction is proportional to the player's edge. With a given edge and per-hand variance, the Kelly fraction is approximately:
 
-| Table Type | Description | Example |
-|:----------:|:------------|:--------|
-| **Hard Totals** | No aces, or aces counting as 1 | Hard 16 vs Dealer 10 → HIT |
-| **Soft Totals** | Contains an ace counting as 11 | Soft 18 vs Dealer 9 → HIT |
-| **Pairs** | Two cards of same value | 8,8 vs Any → SPLIT |
+$$f^* \approx \frac{\text{Edge}}{\text{Variance}}$$
 
-</div>
+The player's edge is modeled as a linear function of the true count:
 
-#### Legend
+$$\text{Edge} = 0.5\% \times \text{True Count} - 0.5\%$$
 
-| Symbol | Action |
-|:------:|:-------|
-| **H** | Hit - Take another card |
-| **S** | Stand - Keep current hand |
-| **D** | Double - Double bet, take one card |
-| **Ds** | Double if allowed, else Stand |
-| **P** | Split - Separate into two hands |
-
----
-
-### 🔵 Kelly Criterion Betting
-
-> *"Bet a fraction of your bankroll proportional to your edge"*
-
-Mathematical framework for optimal bet sizing based on expected advantage.
-
-#### The Kelly Formula
-
-$$f^* = \frac{p \cdot b - q}{b} = \frac{\text{Edge}}{\text{Odds}}$$
-
-Where:
-- $f^*$ = Optimal fraction of bankroll to bet
-- $p$ = Probability of winning
-- $q$ = Probability of losing (1 - p)
-- $b$ = Odds received on the bet
-
-#### Implementation Parameters
+Parameters:
 
 ```python
-HOUSE_EDGE = 0.005          # 0.5% base disadvantage
-EDGE_PER_TRUE_COUNT = 0.005 # +0.5% per True Count
-VARIANCE = 1.33             # Standard Blackjack variance
-KELLY_MULTIPLIER = 0.5      # Half Kelly (safer)
-MAX_BET_CAP = 0.20          # Never bet >20% of bankroll
+HOUSE_EDGE = 0.005           # 0.5% base disadvantage
+EDGE_PER_TRUE_COUNT = 0.005  # +0.5% per unit of true count
+VARIANCE = 1.33              # per-hand variance
+KELLY_MULTIPLIER = 0.5       # half Kelly
+MAX_BET_CAP = 0.20           # maximum 20% of bankroll per bet
 ```
 
-#### Advantage Calculation
+| True count | Edge |
+|:----------:|:----:|
+| 1 | 0.0% |
+| 2 | +0.5% |
+| 3 | +1.0% |
+| 4 | +1.5% |
 
-$$\text{Advantage} = (\text{True Count} \times 0.5\%) - 0.5\%$$
+When the edge is zero or negative, the agent bets the table minimum.
 
-| True Count | Player Edge | Recommended Action |
-|:----------:|:-----------:|:-------------------|
-| < 1.5 | Negative | Bet minimum |
-| 2 | +0.25% | Slight increase |
-| 3 | +0.75% | Moderate increase |
-| 4+ | +1.25%+ | Maximum bet spread |
+### Q-Learning Agent
 
----
+A tabular Q-Learning agent learns a policy from simulated hands.
 
-### 🟣 Q-Learning AI
-
-> *"Let the machine discover optimal strategy through experience"*
-
-A reinforcement learning agent that learns to play Blackjack through millions of simulated hands.
-
-#### State Space
-
-```
-State = (player_sum, dealer_card, usable_ace, count_bucket)
-```
+State:
 
 | Component | Values | Description |
 |:---------:|:------:|:------------|
-| `player_sum` | 4-21 | Current hand total |
-| `dealer_card` | 2-11 | Dealer's visible card |
-| `usable_ace` | True/False | Ace that can be 11 |
-| `count_bucket` | -1, 0, +1 | Cold/Neutral/Hot deck |
+| `player_sum` | 4 to 21 | Current hand total |
+| `dealer_card` | 2 to 11 | Dealer up card |
+| `usable_ace` | True / False | Whether an ace counts as 11 |
+| `count_bucket` | -1, 0, +1 | Low, neutral or high count |
 
-#### Hyperparameters
+Actions: stand, hit, double.
 
-| Parameter | Value | Purpose |
-|:---------:|:-----:|:--------|
-| α (Learning Rate) | 0.001 | Step size for Q updates |
-| γ (Discount Factor) | 1.0 | Weight of future rewards |
-| ε (Exploration) | 1.0 → 0.05 | Exploration vs exploitation |
-| Episodes | 10,000,000 | Training hands |
-
-#### Q-Learning Update Rule
+Update rule:
 
 $$Q(s,a) \leftarrow Q(s,a) + \alpha \left[ r + \gamma \max_{a'} Q(s',a') - Q(s,a) \right]$$
 
----
+Hyperparameters:
 
-## 📈 Simulation Results
+| Parameter | Value |
+|:----------|:------|
+| Learning rate (alpha) | 0.001 |
+| Discount factor (gamma) | 1.0 |
+| Exploration (epsilon) | 1.0 decayed to 0.05, epsilon-greedy |
+| Training hands | 10,000,000 |
 
-### Monte Carlo Analysis
+## Results
 
-After training the Q-Learning agent on 10 million hands and running 100 Monte Carlo simulations:
+After training, the agent is evaluated with 100 Monte Carlo simulations.
 
-<div align="center">
+| Setting | Value |
+|:--------|:------|
+| Starting bankroll | $10,000 |
+| Hands per simulation | 30,000 |
+| Simulations | 100 |
+| Average win rate | about 42% to 44% |
 
-| Metric | Value |
-|:------:|:-----:|
-| 📊 **Average Win Rate** | ~42-44% |
-| 💰 **Starting Bankroll** | $10,000 |
-| 🎰 **Hands per Simulation** | 30,000 |
-| 📈 **Simulations Run** | 100 |
+Notes:
 
-</div>
+- The win rate is stable at about 43% across simulations.
+- Kelly sizing reduces the variance of bankroll trajectories compared with a fixed bet spread.
+- The learned policy depends on the count bucket. The notebook plots heatmaps of the chosen action for hard and soft totals under low, neutral and high counts, so the policy can be compared with basic strategy.
 
-### Key Findings
-
-<table>
-<tr>
-<td align="center" width="33%">
-<h3>🏆</h3>
-<h4>Win Rate</h4>
-<p>Consistent ~43% win rate across simulations with proper strategy</p>
-</td>
-<td align="center" width="33%">
-<h3>📉</h3>
-<h4>Variance</h4>
-<p>Kelly betting reduces variance while maintaining growth</p>
-</td>
-<td align="center" width="33%">
-<h3>🎯</h3>
-<h4>Count-Dependent</h4>
-<p>Q-Learning adapts strategy based on deck composition</p>
-</td>
-</tr>
-</table>
-
-### Strategy Heatmaps
-
-The Q-Learning agent generates visual heatmaps showing optimal actions for:
-
-- **Hard Totals** (Cold/Neutral/Hot counts)
-- **Soft Totals** (Cold/Neutral/Hot counts)
-
-These visualizations allow comparison with traditional basic strategy and show how optimal play shifts with deck composition.
-
----
-
-## 🛠️ Technical Architecture
+## Code Structure
 
 ```
 blackjack/
-├── 📓 blackjack.ipynb    # Main Jupyter notebook
-├── 📖 README.md          # This file
-└── 🎯 Core Components:
-    ├── Shoe              # Card deck management
-    ├── SmartShoe         # Shoe with Hi-Lo counting
-    ├── BlackjackAdvisor  # Basic strategy lookup
-    ├── KellyMoneyManager # Bet sizing calculations
-    ├── BlackjackEnv      # RL environment
-    └── QLearningAgent    # AI decision maker
+├── blackjack.ipynb    # Simulation, training and analysis
+└── README.md
 ```
 
-### Class Diagram
+Main classes in the notebook:
+
+| Class | Role |
+|:------|:-----|
+| `Shoe` | Card deck management |
+| `SmartShoe` | Shoe that maintains the Hi-Lo count |
+| `BlackjackAdvisor` | Basic strategy lookup |
+| `KellyMoneyManager` | Bet sizing |
+| `BlackjackEnv` | Environment for the RL agent |
+| `QLearningAgent` | Q-Learning policy |
 
 ```mermaid
 classDiagram
@@ -396,72 +214,40 @@ classDiagram
         +reset()
         +deal()
     }
-    
     class SmartShoe {
         +int running_count
         +float penetration
         +get_true_count()
     }
-    
     class BlackjackEnv {
         +step(state, action)
         +get_count_bucket()
     }
-    
     class QLearningAgent {
         +dict Q
         +choose_action(state)
-        +learn(s, a, r, s', done)
+        +learn(s, a, r, s_next, done)
     }
-    
     Shoe <|-- SmartShoe
-    SmartShoe <-- BlackjackEnv
-    BlackjackEnv <-- QLearningAgent
+    BlackjackEnv --> SmartShoe : uses
+    QLearningAgent --> BlackjackEnv : interacts with
 ```
 
----
+## References
 
-## 📚 References
+- Edward O. Thorp, *Beat the Dealer*
+- [Kelly criterion](https://en.wikipedia.org/wiki/Kelly_criterion)
+- [Hi-Lo counting, Wizard of Odds](https://wizardofodds.com/games/blackjack/card-counting/high-low/)
+- Sutton and Barto, [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book.html)
 
-<div align="center">
+## Contributing
 
-| 📖 Resource | 🔗 Link |
-|:------------|:--------|
-| Beat the Dealer (Edward O. Thorp) | [Amazon](https://www.amazon.com/Beat-Dealer-Winning-Strategy-Twenty-One/dp/0394703103) |
-| The Kelly Criterion | [Wikipedia](https://en.wikipedia.org/wiki/Kelly_criterion) |
-| Hi-Lo Card Counting | [Wizard of Odds](https://wizardofodds.com/games/blackjack/card-counting/high-low/) |
-| Q-Learning | [Sutton & Barto RL Book](http://incompleteideas.net/book/the-book.html) |
+Fork the repository, create a branch, and open a pull request.
 
-</div>
+## License
 
----
+MIT. See [LICENSE](LICENSE).
 
-<div align="center">
+## Disclaimer
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-
-1. 🍴 Fork the repository
-2. 🔧 Create a feature branch
-3. 📝 Commit your changes
-4. 🚀 Push to the branch
-5. 📫 Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  Made with ❤️ and 🃏
-</p>
-
-<p align="center">
-  <strong>⚠️ Disclaimer:</strong> This project is for educational purposes only. Gambling involves risk. Please gamble responsibly.
-</p>
-
-</div>
+This project is for educational purposes. Gambling involves financial risk.
